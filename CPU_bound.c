@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#include <time.h>
 
-int prime(int n) {
+int primo(int n) {
     if (n <= 1) return 0;
     for (int i = 2; i <= sqrt(n); i++) {
         if (n % i == 0) return 0;
@@ -13,19 +15,28 @@ int prime(int n) {
 int main() {
     long long count = 0;
     int num = 2;
-    
-    printf("Starting. Ctrl+c to stop\n");
-    
+    time_t start_time = time(NULL);
+   
+    printf("Aperte Ctrl+C para parar.\n");
+   
     while (1) {
-        if (prime(num)) {
-            count++;
+        for (int i = 0; i < 1000000; i++) {
+            if (primo(num)) {
+                count++;
+            }
+            num++;
         }
-        num++;
-        
-        if (count % 1000000 == 0) {
-            printf("Found %lld prime numbers so far.\n", count);
+       
+        printf("Found %lld prime numbers so far.\n", count);
+        fflush(stdout);  
+       
+ 
+        if (time(NULL) - start_time >= 5) {
+            printf("Sleeping for 100ms...\n");
+            usleep(100000);  // Sleep por 100ms
+            start_time = time(NULL);
         }
     }
-    
+   
     return 0;
 }
